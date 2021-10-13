@@ -1,6 +1,1 @@
-{
-"1" :{
-	"carType":"MonsterTruck",
-	"money":15, "spotId":11
-}
-}
+{"1": {"carType": "MonsterTruck", "money": 15, "spotId": 11, "carNo": "ABC12334"}, "168": {"carType": "MonsterTruck", "carNo": "MT89789", "spotId": "7,6", "money": "15"}, "796": {"carType": "Regular", "carNo": "RE1232", "spotId": "8", "money": "10"}}

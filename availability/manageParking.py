@@ -56,13 +56,16 @@ def parkCar(spotIds,carNo,carType):
 
 	## Update carData.json starts here
 	carFile = open('./data/carData.json','r+')
-	spotValue = ','.join(spotIds)
-	
-	car_object = {
+	spotValue = ','.join(map(str,spotIds))
+	money = "10"
+	if carType == "MonsterTruck":
+		money = "15"
+	car_object = {str(random.randrange(2,1000)):{
 		"carType": carType,
 		"carNo": carNo,
-		"spotId":','.join(spotIds) 
-	}
+		"spotId":spotValue, 
+		"money": money
+	}}
 	carDict = json.load(carFile)
 	carDict.update(car_object)
 	carFile.seek(0)
@@ -73,8 +76,5 @@ def parkCar(spotIds,carNo,carType):
 	return True	
 
 if __name__ == "__main__":
-	#print(isParkingAvailable("MonsterTruck"))
-	print(isParkingAvailable("Regular","XAZ789789"))	
-	
-	
-
+	print(isParkingAvailable("MonsterTruck","MT89789"))
+	print(isParkingAvailable("Regular","RE1232"))
