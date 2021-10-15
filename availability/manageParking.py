@@ -1,66 +1,29 @@
 import json
 import random
+from data.carTypeEnum import CarTypeEnum
+from data.cars import Cars
+from data.parkingSpots import ParkingSpots
 
 
-def isParkingAvailable(carType, carNo):
-    data = open('./data/parkingSpotData.json', 'r')
-    spots = json.load(data)
-    data.close()
-    for key, value in spots.items():
-        spotId = int(key)
-        if value["availability"] == "True":
-            if carType == "Regular":
-                parkCar(key, carNo, carType)
-                return True
-            else:
-                response = checkConsecutiveSpots()
-                if response is not False:
-                    parkCar(response, carNo, carType)
-                    return True
+def isParkingAvailable(carType):
+    parkingSpots = ParkingSpots()
+    parkingFlag = 0
+    if carType == CarTypeEnum.MT.value:
+        parkingFlag = 1
+    response = parkingSpots.isParkingAvailable(parkingFlag)
+    print(response)
+    return response
 
-    return False
-
-
-def checkConsecutiveSpots():
-    with open('./data/parkingSpotData.json') as data:
-        spots = json.load(data)
-        data.close()
-    for key, value in spots.items():
-        currentSpotId = int(key)
-        currentBlockId = int(value["blockId"])
-        if value["availability"] == "False":
-            continue
-        for nextKey, nextValue in spots.items():
-            nextSpotId = int(nextKey)
-            if nextValue["availability"] == "False":
-                continue
-            nextBlockId = int(nextValue["blockId"])
-            if abs(currentSpotId - nextSpotId == 1) and currentBlockId == nextBlockId:
-                return [currentSpotId, nextSpotId]
-            else:
-                continue
-
-    return False
 
 
 def parkCar(spotIds, carNo, carType):
-    # Updating parking spot data and updating availability to False
-    data = open('./data/parkingSpotData.json', 'r')
-    json_object = json.load(data)
-    data.close()
+    car = Cars()
+    parkingSpots = ParkingSpots()
+    parkingSpots.bookSpots(spotIds)
 
-    for spotId in spotIds:
-        json_object[str(spotId)]["availability"] = "False"
-    data = open('./data/parkingspotData.json', 'w')
-    json.dump(json_object, data)
-    data.close()
-    # Updating parking spot data ends here
-
-    # Update carData.json starts here
-    carFile = open('./data/carData.json', 'r+')
     spotValue = ','.join(map(str, spotIds))
     money = "10"
-    if carType == "MONSTER_TRUCK":
+    if carType == CarTypeEnum.MT.value:
         money = "15"
     car_object = {str(random.randrange(2, 1000)): {
         "carType": carType,
@@ -68,16 +31,22 @@ def parkCar(spotIds, carNo, carType):
         "spotId": spotValue,
         "money": money
     }}
-    carDict = json.load(carFile)
-    carDict.update(car_object)
-    carFile.seek(0)
-    json.dump(carDict, carFile)
-    carFile.close()
-
-    # update carData.json ends here
+    car.addCar(car_object)
     return True
 
 
 if __name__ == "__main__":
-    print(isParkingAvailable("MONSTER_TRUCK", "MT89789"))
-    print(isParkingAvailable("Regular", "RE1232"))
+    McarType = "MONSTER_TRUCK"
+    McarNo = "MTTESTING"
+    RcarType = "REGULAR"
+    RCarNo = "RTESTING"
+    response = isParkingAvailableNew(McarType)
+    print("resposnse for monster truck is ", response)
+    if response is not False:
+        print("Parking is available for monster truck so calling park car function.")
+        parkCar(response, McarNo, McarType)
+
+    r = isParkingAvailableNew(RcarType)
+    if r is not False:
+        print("parking is available for regular car hence calling park car function.")
+        parkCar(r, RCarNo, RcarType)

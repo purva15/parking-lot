@@ -1,4 +1,4 @@
-from flask import Flask, url_for
+from flask import Flask, url_for, request
 from availability import manageParking
 from report import revenueReport
 
@@ -10,12 +10,17 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 
-@app.route("/availability/<carType>/<carNo>")
-def checkAvailability(carType=None, carNo=None):
-    response = manageParking.isParkingAvailable(carType, carNo)
+@app.route("/reserve", methods=["POST"])
+def checkAvailability():
+    data = request.get_json()
+    print(data)
+    response = manageParking.isParkingAvailable(data["carType"])
     print(response)
+    if response is not False:
+        isCarParked = manageParking.parkCar(response, data["carNo"], data["carType"])
+        print(isCarParked)
     return {
-        "availability": response
+        "availability": isCarParked
     }
 
 
