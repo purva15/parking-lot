@@ -2,6 +2,7 @@ from flask import Flask, url_for, request
 from availability import manageParking
 from report import revenueReport
 
+
 app = Flask(__name__)
 
 

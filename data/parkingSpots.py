@@ -1,21 +1,18 @@
 import json
+from db.db import Sqlite
 
 
 class ParkingSpots:
+
     def checkConsecutiveSpots(self):
-        with open('./data/parkingSpotData.json') as data:
-            spots = json.load(data)
-            data.close()
-        for key, value in spots.items():
-            currentSpotId = int(key)
-            currentBlockId = int(value["blockId"])
-            if value["availability"] == "False":
-                continue
-            for nextKey, nextValue in spots.items():
-                nextSpotId = int(nextKey)
-                if nextValue["availability"] == "False":
-                    continue
-                nextBlockId = int(nextValue["blockId"])
+        db = Sqlite()
+        response = db.getAllAvailableParkingSpots()
+        for tup in response:
+            currentSpotId = int(tup[0])
+            currentBlockId = int(tup[1])
+            for nextTup in response:
+                nextSpotId = int(nextTup[0])
+                nextBlockId = int(nextTup[1])
                 if abs(currentSpotId - nextSpotId == 1) and currentBlockId == nextBlockId:
                     return [currentSpotId, nextSpotId]
                 else:
@@ -27,24 +24,14 @@ class ParkingSpots:
         if slotFlag == 1:
             return self.checkConsecutiveSpots()
         else:
-            data = open('./data/parkingSpotData.json', 'r')
-            spots = json.load(data)
-            data.close()
-            for key, value in spots.items():
-                #spotId = int(key)
-                if value["availability"] == "True":
-                    return key
+            db = Sqlite()
+            response = db.getAvailableParkingSpot()
+            print(response[0])
+            return key
 
-        return False
+        return response[0]
 
     def bookSpots(self, spotIds):
-        data = open('./data/parkingSpotData.json', 'r')
-        json_object = json.load(data)
-        data.close()
-        print("In book spots herer spot ids are ",spotIds)
-        for spotId in spotIds:
-            json_object[str(spotId)]["availability"] = "False"
-        data = open('./data/parkingspotData.json', 'w')
-        json.dump(json_object, data)
-        data.close()
+        db = Sqlite()
+        response = db.bookSpots(spotIds)
         return True

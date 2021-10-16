@@ -101,7 +101,10 @@ None
 {
     "totalCarsRevenueEarnedFrom" : totalCars,
 	"revenue" : revenue,
-	"noOfParkedCarsNow": totalParkedCars,
-	"parkedCarsCountType": parkedCarsCountType
+    "parkedCars" : {
+        "count" : totalParkedCars,
+        "monster_truck" : parkedMonsterTruckCount,
+        "regular" :  parkedRegularCount
+    }
 }	
 ```
