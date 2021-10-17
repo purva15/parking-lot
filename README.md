@@ -46,8 +46,8 @@ This API is used to reserve a parking spot if available. For simplicity car is c
 |-----|-------------|------|----------------|----------|-------|
 |`carType`| `Type` of the car | string | `REGULAR` or `MONSTER_TRUCK` | required | If not specified default `REGULAR` will be assumed |
 |`carNo`| car Number | string | any alphanumeric value | required | If not specified `400` will be returned |
-|`available`| availability of parking spot | boolean | `true` or `false`| required | Describes whether parking spot is available or not |
-|`charge`| charge for the parking spot | Integer | $5 for `REGULAR` and `$15` for `MONSTER_TRUCK` | optional | Only when `available` is set to `true`. |
+|`available`| availability of parking spot | boolean | `True` or `False`| required | Describes whether parking spot is available or not |
+|`charge`| charge for the parking spot | Integer | '$10' for `REGULAR` and `$15` for `MONSTER_TRUCK` | optional | Only when `available` is set to `true`. |
 |`location`| location of the parked car | `Location` object |  | optional | Only when `available` is set to `true` |
 
 
@@ -55,13 +55,13 @@ This API is used to reserve a parking spot if available. For simplicity car is c
 | Key | Description | Type | Allowed Values | Required | Notes |
 |-----|-------------|------|----------------|----------|-------|
 |`spotId`| single or multiple consecutive parking spot ids | List of Integers |  | optional |  Only when `available` is set to `true` |
-|`blockId`| parking block id | Integer |  | optional |  Only when `available` is set to `true` |
+|`blockId`| parking block id. A block is group of consecutive parking spots without driveway. | Integer |  | optional |  Only when `available` is set to `true` |
 
 ### Request Example
 ```json
 {
     "carType": "REGULAR",
-    "carNo": "HWR 3886"
+    "carNo": "HWR3886"
 }
 ```
 
@@ -69,13 +69,12 @@ This API is used to reserve a parking spot if available. For simplicity car is c
 Example when a parking spot is available
 ```json
 {
-    "carType"; "REGULAR",
-    "carNo": "HWR 3886",
+    "carType": "REGULAR",
+    "carNo": "HWR3886",
     "available": true,
     "charge": 5,
     "location": {
-        "spotId": [4],
-        "blockId": 1
+        "spotId": [4],  
         }
 }
 ```
@@ -83,7 +82,7 @@ Example when a parking spot is available
 Example when a parking spot is not available
 ```json
 {
-    "carType"; "MONSTER_TRUCK",
+    "carType": "MONSTER_TRUCK",
     "carNo": "HWR 3886",
     "available": false,
 }
@@ -99,12 +98,12 @@ None
 ### Response Example
 ```json
 {
-    "totalCarsRevenueEarnedFrom" : totalCars,
-	"revenue" : revenue,
+    "totalCarsServed" : 10,
+    "totalRevenue" : 50,
     "parkedCars" : {
-        "count" : totalParkedCars,
-        "monster_truck" : parkedMonsterTruckCount,
-        "regular" :  parkedRegularCount
+        "count" : 4,
+        "monsterTrucks" : 2,
+        "regularCars" :  2
     }
 }	
 ```

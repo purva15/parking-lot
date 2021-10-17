@@ -1,37 +1,34 @@
 import json
-from data.cars import Cars
 from db.db import Sqlite
 
 
-def generateReport():
-    db = Sqlite()
-    response = db.getAllCarsRevenue()
-    totalCars = response[0][0] 
-    revenue = response[0][1]
+class RevenueReport:
+    """ All the revenue reports are generated through this class"""
 
-    response = db.getNoOfParkedCars()
-    totalParkedCars = response[0][0]
-    print(response)
+    def __init__(self):
+        self._db = Sqlite()
 
-    response = db.getNoOfParkedCarsByType("MONSTER_TRUCK")
-    totalMTCars = response[0][0]
+    def generateReport(self):
+        totalCars, revenue = self._db.getAllCarsRevenue()
 
-    response = db.getNoOfParkedCarsByType("REGULAR")
-    totalRCars = response[0][0]
+        totalParkedCars = self._db.getNoOfParkedCars()
 
-    json_object = {
-        "totalCarsRevenueEarnedFrom" : totalCars,
-        "revenue" : revenue,
-        "parkedCars": {
-            "count" : totalParkedCars,
-            "monster_truck" : totalMTCars,
-            "regular": totalRCars
+        totalMTCars = self._db.getNoOfParkedCarsByType("MONSTER_TRUCK")
+
+        totalRCars = self._db.getNoOfParkedCarsByType("REGULAR")
+
+        response = {
+            "totalCarsServed": totalCars,
+            "totalRevenue": revenue,
+            "parkedCars": {
+                "count": totalParkedCars,
+                "monsterTrucks": totalMTCars,
+                "regularCars": totalRCars
+            }
         }
-    }
-    print(json_object)
-    return json_object
-
+        return response
 
 
 if __name__ == "__main__":
-    generateReport()
+    report = RevenueReport()
+    report.generateReport()
