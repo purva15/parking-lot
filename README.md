@@ -107,3 +107,21 @@ None
     }
 }	
 ```
+
+...
+## Database Tables
+### Table Name : cars
+| id  |   no  |  type  |  spot_id |  money  |   enter_time |  exit_time |
+|-----|-------|--------|----------|---------|--------------|------------|
+* `id` is a primary key. Auto increment 
+* `no` reporesents car no
+* `type` reporesents type of the car 
+*`spot_id` is foreign key, reporesent spot where car is parked. default is 0
+
+### Table Name: parking_spots
+| id |  block_id | availability  |
+|----|-----------|---------------|
+* `id` primary key, auto incaremental. reporesent spot id.
+* `block_id` represent block id.
+* `availability` reporesents availability of the paking spot.
+...
