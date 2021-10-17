@@ -35,4 +35,3 @@ class ParkingSpots:
 
     def book(self):
         response = self._db.bookSpots(self.availableSpots)
-        return True

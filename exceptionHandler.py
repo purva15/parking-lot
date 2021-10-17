@@ -1,14 +1,15 @@
 class InvalidAPIUsage(Exception):
-    status_code = 400
+    statusCode = 400
 
-    def __init__(self, message, status_code=None, payload=None):
+    def __init__(self, errorDescription, errorId, statusCode=None):
         super().__init__()
-        self.message = message
-        if status_code is not None:
-            self.status_code = status_code
-        self.payload = payload
+        self.errorDescription = errorDescription
+        self.errorId = errorId
+        if statusCode is not None:
+            self.statusCode = statusCode
 
     def to_dict(self):
-        rv = dict(self.payload or ())
-        rv['message'] = self.message
+        rv = dict()
+        rv['errorId'] = self.errorId
+        rv['errorDescription'] = self.errorDescription
         return rv

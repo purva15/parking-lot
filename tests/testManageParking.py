@@ -1,10 +1,10 @@
 import unittest
-import availability.manageParking as parking
-
+from parkings.parkingSpots import ParkingSpots
 
 class TestManageParking(unittest.TestCase):
-    def testParking(self,carType):
-        response = parking.isParkingAvailable("REGULAR")
+    def testParking(self):
+        parkingSpots = ParkingSpots()
+        response = parkingSpots.isAvailable("REGULAR")
         self.assertIsNotNone(response)
 
 if __name__ == "__main__":

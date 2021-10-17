@@ -1,10 +1,11 @@
 import unittest
-import report.revenueReport as rReport
+from report.revenueReport import RevenueReport
 
 
 class TestReport(unittest.TestCase):
     def testGenerateReport(self):
-        response = rReport.generateReport()
+        report = RevenueReport()
+        response = report.generateReport()
         print(response)
         self.assertIsNotNone(response)
 
